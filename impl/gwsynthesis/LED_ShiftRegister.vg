@@ -1,0 +1,147 @@
+//
+//Written by GowinSynthesis
+//Tool Version "V1.9.10.02"
+//Mon Oct 28 15:21:52 2024
+
+//Source file index table:
+//file0 "\C:/Gowin/Gowin_V1.9.10.02_x64/IDE/bin/Documents/LED_ShiftRegister/src/LED_ShiftRegister.v"
+`timescale 100 ps/100 ps
+module LED_ShiftRegister (
+  RSTn,
+  clk,
+  SW1,
+  leds
+)
+;
+input RSTn;
+input clk;
+input SW1;
+output [1:6] leds;
+wire RSTn_d;
+wire clk_d;
+wire SW1_d;
+wire n45_4;
+wire buttonPressed;
+wire delay_switch;
+wire [1:0] synch;
+wire [6:1] leds_d;
+wire VCC;
+wire GND;
+  IBUF RSTn_ibuf (
+    .O(RSTn_d),
+    .I(RSTn) 
+);
+  IBUF clk_ibuf (
+    .O(clk_d),
+    .I(clk) 
+);
+  IBUF SW1_ibuf (
+    .O(SW1_d),
+    .I(SW1) 
+);
+  OBUF leds_1_obuf (
+    .O(leds[1]),
+    .I(leds_d[1]) 
+);
+  OBUF leds_2_obuf (
+    .O(leds[2]),
+    .I(leds_d[2]) 
+);
+  OBUF leds_3_obuf (
+    .O(leds[3]),
+    .I(leds_d[3]) 
+);
+  OBUF leds_4_obuf (
+    .O(leds[4]),
+    .I(leds_d[4]) 
+);
+  OBUF leds_5_obuf (
+    .O(leds[5]),
+    .I(leds_d[5]) 
+);
+  OBUF leds_6_obuf (
+    .O(leds[6]),
+    .I(leds_d[6]) 
+);
+  LUT2 n45_s0 (
+    .F(n45_4),
+    .I0(delay_switch),
+    .I1(synch[1]) 
+);
+defparam n45_s0.INIT=4'h4;
+  DFFC synch_0_s0 (
+    .Q(synch[0]),
+    .D(SW1_d),
+    .CLK(clk_d),
+    .CLEAR(RSTn_d) 
+);
+  DFFC buttonPressed_s0 (
+    .Q(buttonPressed),
+    .D(n45_4),
+    .CLK(clk_d),
+    .CLEAR(RSTn_d) 
+);
+  DFFC delay_switch_s0 (
+    .Q(delay_switch),
+    .D(synch[1]),
+    .CLK(clk_d),
+    .CLEAR(RSTn_d) 
+);
+  DFFCE shiftreg_1_s0 (
+    .Q(leds_d[1]),
+    .D(leds_d[6]),
+    .CLK(clk_d),
+    .CE(buttonPressed),
+    .CLEAR(RSTn_d) 
+);
+  DFFPE shiftreg_3_s0 (
+    .Q(leds_d[3]),
+    .D(leds_d[2]),
+    .CLK(clk_d),
+    .CE(buttonPressed),
+    .PRESET(RSTn_d) 
+);
+  DFFPE shiftreg_4_s0 (
+    .Q(leds_d[4]),
+    .D(leds_d[3]),
+    .CLK(clk_d),
+    .CE(buttonPressed),
+    .PRESET(RSTn_d) 
+);
+  DFFPE shiftreg_5_s0 (
+    .Q(leds_d[5]),
+    .D(leds_d[4]),
+    .CLK(clk_d),
+    .CE(buttonPressed),
+    .PRESET(RSTn_d) 
+);
+  DFFPE shiftreg_6_s0 (
+    .Q(leds_d[6]),
+    .D(leds_d[5]),
+    .CLK(clk_d),
+    .CE(buttonPressed),
+    .PRESET(RSTn_d) 
+);
+  DFFC synch_1_s0 (
+    .Q(synch[1]),
+    .D(synch[0]),
+    .CLK(clk_d),
+    .CLEAR(RSTn_d) 
+);
+  DFFPE shiftreg_2_s0 (
+    .Q(leds_d[2]),
+    .D(leds_d[1]),
+    .CLK(clk_d),
+    .CE(buttonPressed),
+    .PRESET(RSTn_d) 
+);
+  VCC VCC_cZ (
+    .V(VCC)
+);
+  GND GND_cZ (
+    .G(GND)
+);
+  GSR GSR (
+    .GSRI(VCC) 
+);
+endmodule /* LED_ShiftRegister */
